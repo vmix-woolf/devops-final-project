@@ -1,0 +1,35 @@
+replicaCount: 2
+
+image:
+  repository: REPLACE_WITH_ECR_REPOSITORY_URL
+  tag: latest
+  pullPolicy: Always
+
+service:
+  type: LoadBalancer
+  port: 80
+  targetPort: 8000
+
+config:
+  SECRET_KEY: "REPLACE_WITH_DJANGO_SECRET_KEY"
+  DEBUG: "True"
+  ALLOWED_HOSTS: "*"
+  DB_NAME: "django_db"
+  DB_USER: "django_user"
+  DB_PASSWORD: "change_me"
+  DB_HOST: "localhost"
+  DB_PORT: "5432"
+
+autoscaling:
+  enabled: true
+  minReplicas: 2
+  maxReplicas: 6
+  targetCPUUtilizationPercentage: 70
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 128Mi
+  limits:
+    cpu: 500m
+    memory: 512Mi

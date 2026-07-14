@@ -1,0 +1,21 @@
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+crash.log
+crash.*.log
+*.tfvars
+*.tfvars.json
+
+# Secrets
+*.pem
+
+# macOS
+.DS_Store
+
+# IDE
+.idea/
+.vscode/
+
+# Archives
+*.zip
