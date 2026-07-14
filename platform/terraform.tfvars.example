@@ -1,0 +1,6 @@
+aws_region         = "us-west-2"
+cluster_name       = "devops-final-project-eks"
+ecr_repository_url = "REPLACE_WITH_ECR_REPOSITORY_URL"
+
+github_ssh_private_key = "REPLACE_WITH_GITHUB_SSH_PRIVATE_KEY"
+jenkins_admin_password = "REPLACE_WITH_JENKINS_ADMIN_PASSWORD"

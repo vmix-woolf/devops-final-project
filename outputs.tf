@@ -1,18 +1,3 @@
-output "s3_bucket_name" {
-  description = "Name of the S3 bucket for Terraform state"
-  value       = module.s3_backend.s3_bucket_name
-}
-
-output "s3_bucket_url" {
-  description = "S3 URL of the Terraform state bucket"
-  value       = module.s3_backend.s3_bucket_url
-}
-
-output "dynamodb_table_name" {
-  description = "Name of the DynamoDB table for Terraform locking"
-  value       = module.s3_backend.dynamodb_table_name
-}
-
 output "vpc_id" {
   description = "ID of the created VPC"
   value       = module.vpc.vpc_id
@@ -77,40 +62,4 @@ output "eks_cluster_certificate_authority_data" {
   description = "Certificate authority data of the EKS cluster"
   value       = module.eks.cluster_certificate_authority_data
   sensitive   = true
-}
-
-output "jenkins_namespace" {
-  description = "Jenkins namespace"
-  value       = module.jenkins.namespace
-}
-
-output "jenkins_release_name" {
-  description = "Jenkins Helm release name"
-  value       = module.jenkins.release_name
-}
-
-output "jenkins_admin_user" {
-  description = "Jenkins admin username"
-  value       = module.jenkins.admin_user
-}
-
-output "jenkins_admin_password" {
-  description = "Jenkins admin password"
-  value       = module.jenkins.admin_password
-  sensitive   = true
-}
-
-output "argocd_namespace" {
-  description = "Argo CD namespace"
-  value       = module.argo_cd.namespace
-}
-
-output "argocd_release_name" {
-  description = "Argo CD Helm release name"
-  value       = module.argo_cd.release_name
-}
-
-output "argocd_server_service_name" {
-  description = "Argo CD server service name"
-  value       = module.argo_cd.server_service_name
 }

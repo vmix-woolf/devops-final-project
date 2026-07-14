@@ -1,0 +1,6 @@
+project_name    = "devops-final-project"
+environment     = "final"
+aws_region      = "us-west-2"
+cluster_name    = "devops-final-project-eks"
+repository_name = "devops-final-project-ecr"
+database_name   = "django_db"
