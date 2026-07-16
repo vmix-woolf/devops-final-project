@@ -54,7 +54,6 @@ variable "password" {
   description = "Master database password."
   type        = string
   sensitive   = true
-  default     = "ChangeMe123456!"
 }
 
 variable "vpc_id" {

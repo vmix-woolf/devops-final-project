@@ -41,14 +41,16 @@ resource "helm_release" "argocd_applications" {
       }
 
       application = {
-        name           = "django-app"
-        namespace      = var.namespace
-        project        = "default"
-        sourceRepoURL  = var.repository_url
-        targetRevision = var.target_revision
-        chartPath      = var.app_chart_path
-        destination    = "https://kubernetes.default.svc"
-        destNamespace  = var.app_namespace
+        name            = "django-app"
+        namespace       = var.namespace
+        project         = "default"
+        sourceRepoURL   = var.repository_url
+        targetRevision  = var.target_revision
+        chartPath       = var.app_chart_path
+        destination     = "https://kubernetes.default.svc"
+        destNamespace   = var.app_namespace
+        imageRepository = var.image_repository
+        postgresHost    = var.postgres_host
       }
     })
   ]

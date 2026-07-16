@@ -1,5 +1,3 @@
-data "aws_caller_identity" "current" {}
-
 resource "aws_ecr_repository" "main" {
   name         = var.ecr_name
   force_delete = true
@@ -20,32 +18,40 @@ resource "aws_ecr_repository" "main" {
   }
 }
 
-resource "aws_ecr_repository_policy" "main" {
+resource "aws_ecr_lifecycle_policy" "main" {
   repository = aws_ecr_repository.main.name
 
   policy = jsonencode({
-    Version = "2012-10-17"
-    Statement = [
+    rules = [
       {
-        Sid    = "AllowAccountAccess"
-        Effect = "Allow"
+        rulePriority = 1
+        description  = "Keep the 10 most recent tagged images"
 
-        Principal = {
-          AWS = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:root"
+        selection = {
+          tagStatus     = "tagged"
+          tagPrefixList = ["build-", "release-", "latest"]
+          countType     = "imageCountMoreThan"
+          countNumber   = 10
         }
 
-        Action = [
-          "ecr:BatchCheckLayerAvailability",
-          "ecr:BatchGetImage",
-          "ecr:CompleteLayerUpload",
-          "ecr:DescribeImages",
-          "ecr:DescribeRepositories",
-          "ecr:GetDownloadUrlForLayer",
-          "ecr:InitiateLayerUpload",
-          "ecr:ListImages",
-          "ecr:PutImage",
-          "ecr:UploadLayerPart"
-        ]
+        action = {
+          type = "expire"
+        }
+      },
+      {
+        rulePriority = 2
+        description  = "Remove untagged images older than 7 days"
+
+        selection = {
+          tagStatus   = "untagged"
+          countType   = "sinceImagePushed"
+          countUnit   = "days"
+          countNumber = 7
+        }
+
+        action = {
+          type = "expire"
+        }
       }
     ]
   })

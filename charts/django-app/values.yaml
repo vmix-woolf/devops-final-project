@@ -11,14 +11,18 @@ service:
   targetPort: 8000
 
 config:
-  SECRET_KEY: "REPLACE_WITH_DJANGO_SECRET_KEY"
-  DEBUG: "True"
-  ALLOWED_HOSTS: "*"
-  DB_NAME: "django_db"
-  DB_USER: "django_user"
-  DB_PASSWORD: "change_me"
-  DB_HOST: "localhost"
-  DB_PORT: "5432"
+  DJANGO_DEBUG: "False"
+  DJANGO_ALLOWED_HOSTS: "*"
+  POSTGRES_DB: "django_db"
+  POSTGRES_USER: "dbadmin"
+  POSTGRES_HOST: "REPLACE_WITH_RDS_ENDPOINT"
+  POSTGRES_PORT: "5432"
+
+secret:
+  create: false
+  existingSecret: django-app-secret
+  DJANGO_SECRET_KEY: ""
+  POSTGRES_PASSWORD: ""
 
 autoscaling:
   enabled: true

@@ -39,8 +39,8 @@ output "subnet_group_name" {
 output "parameter_group_name" {
   description = "Parameter group name used by selected database mode."
   value = var.use_aurora ? (
-    aws_rds_cluster_parameter_group.this.name
+    aws_rds_cluster_parameter_group.this[0].name
     ) : (
-    aws_db_parameter_group.this.name
+    aws_db_parameter_group.this[0].name
   )
 }

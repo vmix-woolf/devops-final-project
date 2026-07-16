@@ -33,3 +33,15 @@ variable "database_name" {
   type        = string
   default     = "django_db"
 }
+
+variable "database_username" {
+  description = "PostgreSQL master username."
+  type        = string
+  default     = "dbadmin"
+}
+
+variable "database_password" {
+  description = "PostgreSQL master password."
+  type        = string
+  sensitive   = true
+}

@@ -7,7 +7,9 @@ application:
   namespace: argocd
   project: default
   sourceRepoURL: ""
-  targetRevision: main
+  targetRevision: final-project
   chartPath: charts/django-app
   destination: https://kubernetes.default.svc
   destNamespace: django-app
+  imageRepository: ""
+  postgresHost: ""

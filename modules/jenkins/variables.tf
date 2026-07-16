@@ -20,10 +20,16 @@ variable "admin_password" {
   sensitive   = true
 }
 
+variable "github_ssh_private_key" {
+  description = "SSH private key used by Jenkins to access GitHub"
+  type        = string
+  sensitive   = true
+}
+
 variable "service_type" {
   description = "Kubernetes service type for Jenkins controller"
   type        = string
-  default     = "LoadBalancer"
+  default     = "ClusterIP"
 }
 
 variable "storage_class" {
@@ -50,5 +56,10 @@ variable "ecr_repository" {
 
 variable "aws_region" {
   description = "AWS region"
+  type        = string
+}
+
+variable "service_account_role_arn" {
+  description = "IAM role ARN assumed by Jenkins Kubernetes agents through IRSA"
   type        = string
 }

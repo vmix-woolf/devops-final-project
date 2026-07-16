@@ -18,6 +18,19 @@ resource "kubernetes_secret" "jenkins_admin" {
   }
 }
 
+resource "kubernetes_secret" "github_ssh" {
+  metadata {
+    name      = "jenkins-github-ssh"
+    namespace = kubernetes_namespace.jenkins.metadata[0].name
+  }
+
+  type = "Opaque"
+
+  data = {
+    private-key = var.github_ssh_private_key
+  }
+}
+
 resource "helm_release" "jenkins" {
   name       = "jenkins"
   repository = "https://charts.jenkins.io"
@@ -29,17 +42,20 @@ resource "helm_release" "jenkins" {
 
   values = [
     templatefile("${path.module}/values.yaml", {
-      admin_secret_name = kubernetes_secret.jenkins_admin.metadata[0].name
-      service_type      = var.service_type
-      storage_class     = var.storage_class
-      storage_size      = var.storage_size
-      jenkins_url       = var.jenkins_url
-      ecr_repository    = var.ecr_repository
-      aws_region        = var.aws_region
+      admin_secret_name        = kubernetes_secret.jenkins_admin.metadata[0].name
+      github_secret_name       = kubernetes_secret.github_ssh.metadata[0].name
+      service_type             = var.service_type
+      storage_class            = var.storage_class
+      storage_size             = var.storage_size
+      jenkins_url              = var.jenkins_url
+      ecr_repository           = var.ecr_repository
+      aws_region               = var.aws_region
+      service_account_role_arn = var.service_account_role_arn
     })
   ]
 
   depends_on = [
-    kubernetes_secret.jenkins_admin
+    kubernetes_secret.jenkins_admin,
+    kubernetes_secret.github_ssh
   ]
 }

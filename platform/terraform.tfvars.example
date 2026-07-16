@@ -1,6 +1,16 @@
-aws_region         = "us-west-2"
-cluster_name       = "devops-final-project-eks"
-ecr_repository_url = "REPLACE_WITH_ECR_REPOSITORY_URL"
+aws_region   = "us-west-2"
+cluster_name = "devops-final-project-eks"
+
+eks_oidc_provider_arn = "REPLACE_WITH_EKS_OIDC_PROVIDER_ARN"
+ecr_repository_url    = "REPLACE_WITH_ECR_REPOSITORY_URL"
+ecr_repository_arn    = "REPLACE_WITH_ECR_REPOSITORY_ARN"
 
 github_ssh_private_key = "REPLACE_WITH_GITHUB_SSH_PRIVATE_KEY"
 jenkins_admin_password = "REPLACE_WITH_JENKINS_ADMIN_PASSWORD"
+
+monitoring_chart_version = "87.15.1"
+grafana_admin_password   = "REPLACE_WITH_GRAFANA_ADMIN_PASSWORD"
+
+rds_endpoint      = "REPLACE_WITH_RDS_ENDPOINT"
+database_password = "REPLACE_WITH_DATABASE_PASSWORD"
+django_secret_key = "REPLACE_WITH_DJANGO_SECRET_KEY"

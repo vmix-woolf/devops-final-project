@@ -3,4 +3,7 @@ environment     = "final"
 aws_region      = "us-west-2"
 cluster_name    = "devops-final-project-eks"
 repository_name = "devops-final-project-ecr"
-database_name   = "django_db"
+
+database_name     = "django_db"
+database_username = "dbadmin"
+database_password = "REPLACE_WITH_STRONG_DATABASE_PASSWORD"

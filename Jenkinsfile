@@ -5,11 +5,11 @@ pipeline {
 
     options {
         skipDefaultCheckout(true)
+        disableConcurrentBuilds()
+        timestamps()
     }
 
     environment {
-        AWS_REGION = 'us-west-2'
-        ECR_REPOSITORY = 'REPLACE_WITH_ECR_REPOSITORY_URL'
         CHART_VALUES_FILE = 'charts/django-app/values.yaml'
         TARGET_BRANCH = 'final-project'
         SOURCE_BRANCH = 'final-project'
@@ -39,7 +39,40 @@ pipeline {
             }
         }
 
+        stage('detect automation commit') {
+            steps {
+                container('git') {
+                    script {
+                        String commitAuthor = sh(
+                            script: 'git log -1 --pretty=%ae',
+                            returnStdout: true
+                        ).trim()
+
+                        String commitMessage = sh(
+                            script: 'git log -1 --pretty=%s',
+                            returnStdout: true
+                        ).trim()
+
+                        env.SKIP_PIPELINE = (
+                            commitAuthor == env.GIT_USER_EMAIL &&
+                            commitMessage.startsWith('update django image tag to')
+                        ).toString()
+
+                        if (env.SKIP_PIPELINE == 'true') {
+                            echo 'Skipping Jenkins automation commit.'
+                        }
+                    }
+                }
+            }
+        }
+
         stage('generate image tag') {
+            when {
+                expression {
+                    env.SKIP_PIPELINE != 'true'
+                }
+            }
+
             steps {
                 container('git') {
                     script {
@@ -55,9 +88,18 @@ pipeline {
         }
 
         stage('build and push image with kaniko') {
+            when {
+                expression {
+                    env.SKIP_PIPELINE != 'true'
+                }
+            }
+
             steps {
                 container('kaniko') {
                     sh '''
+                        test -n "${ECR_REPOSITORY}"
+                        test -n "${AWS_REGION}"
+
                         /kaniko/executor \
                           --context "${WORKSPACE}/app" \
                           --dockerfile "${WORKSPACE}/app/Dockerfile" \
@@ -69,19 +111,31 @@ pipeline {
         }
 
         stage('update helm values') {
+            when {
+                expression {
+                    env.SKIP_PIPELINE != 'true'
+                }
+            }
+
             steps {
                 container('git') {
                     sh '''
-                        sed -i "s|tag: .*|tag: ${IMAGE_TAG}|g" "${CHART_VALUES_FILE}"
+                        sed -i "s|^  tag:.*|  tag: ${IMAGE_TAG}|" "${CHART_VALUES_FILE}"
 
-                        echo "Updated Helm values:"
-                        grep -A 4 "^image:" "${CHART_VALUES_FILE}"
+                        echo "Updated Helm image:"
+                        grep -A 3 "^image:" "${CHART_VALUES_FILE}"
                     '''
                 }
             }
         }
 
         stage('commit and push helm values') {
+            when {
+                expression {
+                    env.SKIP_PIPELINE != 'true'
+                }
+            }
+
             steps {
                 container('git') {
                     sshagent(credentials: ["${GIT_SSH_CREDENTIALS_ID}"]) {
@@ -101,6 +155,16 @@ pipeline {
                     }
                 }
             }
+        }
+    }
+
+    post {
+        success {
+            echo 'CI pipeline completed successfully.'
+        }
+
+        failure {
+            echo 'CI pipeline failed.'
         }
     }
 }

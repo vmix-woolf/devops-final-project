@@ -47,3 +47,42 @@ module "eks" {
   node_min_size       = 2
   node_max_size       = 6
 }
+
+module "rds" {
+  source = "./modules/rds"
+
+  name       = "${var.project_name}-db"
+  use_aurora = false
+
+  engine         = "postgres"
+  engine_version = "15"
+  instance_class = "db.t3.micro"
+
+  database_name = var.database_name
+  username      = var.database_username
+  password      = var.database_password
+
+  vpc_id     = module.vpc.vpc_id
+  subnet_ids = module.vpc.private_subnet_ids
+
+  allowed_cidr_blocks = []
+
+  allowed_security_group_ids = [
+    module.eks.cluster_security_group_id
+  ]
+
+  db_port           = 5432
+  allocated_storage = 20
+  storage_type      = "gp3"
+  multi_az          = false
+
+  publicly_accessible     = false
+  backup_retention_period = 1
+  skip_final_snapshot     = true
+  deletion_protection     = false
+
+  tags = {
+    Environment = var.environment
+    ManagedBy   = "Terraform"
+  }
+}

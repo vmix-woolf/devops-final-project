@@ -13,7 +13,7 @@ resource "aws_rds_cluster" "this" {
 
   db_subnet_group_name            = aws_db_subnet_group.this.name
   vpc_security_group_ids          = [aws_security_group.this.id]
-  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this.name
+  db_cluster_parameter_group_name = aws_rds_cluster_parameter_group.this[0].name
 
   backup_retention_period = var.backup_retention_period
   skip_final_snapshot     = var.skip_final_snapshot
@@ -42,8 +42,7 @@ resource "aws_rds_cluster_instance" "writer" {
   instance_class = var.instance_class
 
   db_subnet_group_name = aws_db_subnet_group.this.name
-
-  publicly_accessible = var.publicly_accessible
+  publicly_accessible  = var.publicly_accessible
 
   tags = merge(
     local.common_tags,

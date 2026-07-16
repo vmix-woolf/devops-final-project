@@ -43,3 +43,13 @@ variable "app_namespace" {
   type        = string
   default     = "django-app"
 }
+
+variable "image_repository" {
+  description = "ECR repository URL used by the Django application."
+  type        = string
+}
+
+variable "postgres_host" {
+  description = "Private RDS endpoint used by the Django application."
+  type        = string
+}

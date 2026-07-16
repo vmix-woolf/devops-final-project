@@ -11,6 +11,11 @@ spec:
     path: {{ .Values.application.chartPath | quote }}
     helm:
       releaseName: django-app
+      parameters:
+        - name: image.repository
+          value: {{ .Values.application.imageRepository | quote }}
+        - name: config.POSTGRES_HOST
+          value: {{ .Values.application.postgresHost | quote }}
   destination:
     server: {{ .Values.application.destination | quote }}
     namespace: {{ .Values.application.destNamespace | quote }}

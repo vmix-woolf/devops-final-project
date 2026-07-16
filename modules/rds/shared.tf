@@ -85,6 +85,8 @@ resource "aws_security_group" "this" {
 }
 
 resource "aws_db_parameter_group" "this" {
+  count = var.use_aurora ? 0 : 1
+
   name        = "${var.name}-rds-parameter-group"
   family      = local.rds_parameter_group_family
   description = "Parameter group for regular RDS instance"
@@ -116,6 +118,8 @@ resource "aws_db_parameter_group" "this" {
 }
 
 resource "aws_rds_cluster_parameter_group" "this" {
+  count = var.use_aurora ? 1 : 0
+
   name        = "${var.name}-aurora-parameter-group"
   family      = local.aurora_parameter_group_family
   description = "Parameter group for Aurora cluster"

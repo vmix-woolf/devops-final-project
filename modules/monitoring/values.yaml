@@ -1,0 +1,56 @@
+grafana:
+  enabled: true
+
+  admin:
+    existingSecret: ${grafana_admin_secret}
+    userKey: admin-user
+    passwordKey: admin-password
+
+  service:
+    type: ${grafana_service_type}
+
+  persistence:
+    enabled: false
+
+  defaultDashboardsEnabled: true
+  defaultDashboardsTimezone: browser
+
+prometheus:
+  enabled: true
+
+  prometheusSpec:
+    retention: 2d
+
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        memory: 1Gi
+
+alertmanager:
+  enabled: true
+
+  alertmanagerSpec:
+    resources:
+      requests:
+        cpu: 50m
+        memory: 128Mi
+      limits:
+        memory: 256Mi
+
+prometheusOperator:
+  enabled: true
+
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      memory: 256Mi
+
+kube-state-metrics:
+  enabled: true
+
+prometheus-node-exporter:
+  enabled: true
