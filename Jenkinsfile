@@ -119,8 +119,7 @@ pipeline {
             steps {
                 container('git') {
                     sh '''
-                        sed -i "s|^  tag:.*|  tag: ${IMAGE_TAG}|" "${CHART_VALUES_FILE}"
-
+                        sed -i "s|^  tag:.*|  tag: \"${IMAGE_TAG}\"|" "${CHART_VALUES_FILE}"
                         echo "Updated Helm image:"
                         grep -A 3 "^image:" "${CHART_VALUES_FILE}"
                     '''

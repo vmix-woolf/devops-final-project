@@ -2,7 +2,7 @@ replicaCount: 2
 
 image:
   repository: REPLACE_WITH_ECR_REPOSITORY_URL
-  tag: 0e43510
+  tag: "0f98d87"
   pullPolicy: Always
 
 service:
