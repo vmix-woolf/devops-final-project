@@ -92,16 +92,18 @@ resource "aws_db_parameter_group" "this" {
   description = "Parameter group for regular RDS instance"
 
   parameter {
-    name  = "max_connections"
-    value = var.max_connections
+    name         = "max_connections"
+    value        = var.max_connections
+    apply_method = "pending-reboot"
   }
 
   dynamic "parameter" {
     for_each = local.is_postgres ? [1] : []
 
     content {
-      name  = "log_statement"
-      value = var.log_statement
+      name         = "log_statement"
+      value        = var.log_statement
+      apply_method = "pending-reboot"
     }
   }
 
@@ -109,8 +111,9 @@ resource "aws_db_parameter_group" "this" {
     for_each = local.is_postgres ? [1] : []
 
     content {
-      name  = "work_mem"
-      value = var.work_mem
+      name         = "work_mem"
+      value        = var.work_mem
+      apply_method = "pending-reboot"
     }
   }
 
@@ -125,16 +128,18 @@ resource "aws_rds_cluster_parameter_group" "this" {
   description = "Parameter group for Aurora cluster"
 
   parameter {
-    name  = "max_connections"
-    value = var.max_connections
+    name         = "max_connections"
+    value        = var.max_connections
+    apply_method = "pending-reboot"
   }
 
   dynamic "parameter" {
     for_each = var.engine == "aurora-postgresql" ? [1] : []
 
     content {
-      name  = "log_statement"
-      value = var.log_statement
+      name         = "log_statement"
+      value        = var.log_statement
+      apply_method = "pending-reboot"
     }
   }
 
@@ -142,8 +147,9 @@ resource "aws_rds_cluster_parameter_group" "this" {
     for_each = var.engine == "aurora-postgresql" ? [1] : []
 
     content {
-      name  = "work_mem"
-      value = var.work_mem
+      name         = "work_mem"
+      value        = var.work_mem
+      apply_method = "pending-reboot"
     }
   }
 
